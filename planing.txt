@@ -1,0 +1,26 @@
+GAME to have fun
+
+1. pasirinkti kas pries ka kovos, pvz.: dog vs mouses, man vs zombies ir pan.
+
+2. pasirinkti viena is triju heroju, pvz.: random sugeneruota suniuka su random abilities
+
+3. toliau seka roundai, ko tikslas pasiekti kuo aukstesni rounda
+
+4. vizualiai matome savo heroju (foto) VS panasaus lygio priesa (foto)
+
+5. zaidimo taisykle -> pasirinkti "attack", "defense", "attack-defense" ar pan.
+
+6. priesas random butu taip pat pasirenka viena is optionu
+
+7. priklausomai nuo pasirinkimu kazkas laimi rounda, toliau seka sekantis roundas, jei laimi tavo herojus
+
+8. laimi tas kuriam lieka daugiau "istvermes" -> skaicius, kuris keiciasi kiekvienos atakos metu
+
+9. zaidimas vyksta iki tavo herojaus RIP, tikslas pasiekti kuo aukstesni rounda ir surinkti kuo daugiau tasku :)
+
+
+objektas {}
+ataka ginyba 
+greitis- apspresti kuris laimes
+indexas priesui
+
