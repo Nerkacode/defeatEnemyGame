@@ -1,5 +1,6 @@
 const fighters = document.getElementById("fighters");
 let roundCounter = 1;
+let attemptCounter = 1;
 
 function badAss(value) {
     const fightersImg = document.getElementById('fightersImg');
@@ -317,7 +318,9 @@ function actionButtons(action) {
         OpponentImgSrc.src = "skull.jpg";
         setTimeout( () => { gameFighters(); 
     }, 3000);
-    } 
+    }
+
+    battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue);
 }
 
 function opponentRandomActionbtn() {
@@ -338,6 +341,34 @@ function chooseFighterDivRemove() {
         chooseFighter.parentNode.removeChild(chooseFighter);
     }
 }
+
+
+function battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue) {
+    const battleLogger = document.getElementById('battleLogger') ? document.getElementById('battleLogger') : document.createElement('DIV');
+    const battleLoggerLabel = document.createElement('H3');
+    const firstAttempt = document.createElement('DIV');
+    let myFighterHp = document.getElementById("myFighterHpValue");
+    let OpponentHp = document.getElementById("OpponentHpValue");
+    const myFighterHpCheck = Number(myFighterHp.textContent);
+    const OpponentHpCheck = Number(OpponentHp.textContent);
+    const myFighterHpRezult = (myFighterHpCheck - myFighterHpValue).toFixed(1);
+    const OpponentHpRezult = (OpponentHpCheck - OpponentHpValue).toFixed(1);
+
+    battleLogger.id = "battleLogger";
+    battleLogger.className = "row";
+    battleLoggerLabel.className = "w-100 border-bottom border-dark m-3"; 
+    battleLoggerLabel.textContent = "Battle Logger";
+    firstAttempt.id = "firstAttempt";
+    firstAttempt.className = "col";
+    firstAttempt.textContent = (attemptCounter++) + " attempt // myFighter->" + action + " // opponent->" + opponentRandomAction + " // myFighterHP->" + myFighterHpRezult + " // opponentHP->" + OpponentHpRezult;
+
+    document.getElementById('container').appendChild(battleLogger);
+    document.getElementById('battleLogger').innerHTML = "";
+    document.getElementById('battleLogger').appendChild(battleLoggerLabel);
+    document.getElementById('battleLogger').appendChild(firstAttempt);
+
+}
+
 
 function startBattleButtonDivRemove() {
     if (document.getElementById('startBattleButton') !== null) {
