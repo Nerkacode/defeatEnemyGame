@@ -16,9 +16,9 @@ function randomDog(value, number) {
         .then(result => {
             const dogs = result.message;
             const image = document.createElement('IMG');
-            image.id = "fighterDog" + number;
-            image.src = dogs;
+            image.id = "fighterDog" + number;            
             image.className = "randomFighterDog";
+            image.src = dogs;
 
             value.appendChild(image);
         })
@@ -32,8 +32,8 @@ function randomCat(value, number) {
             const cats = result.file;
             const image = document.createElement('IMG');
             image.id = "fighterCat" + number;
-            image.src = cats;
             image.className = "randomFighterCat";
+            image.src = cats;            
 
             value.appendChild(image);
         })
@@ -55,35 +55,22 @@ function pickHeroButton() {
 
     pickHeroButton.addEventListener("click", value => {
         if (value.target.tagName === "BUTTON") {
-            divRemove("chooseFighter");
-            divRemove("startBattleButton");
-            divRemove("gameFighters");
-            divRemove("battleLogger");
+            removeElementDiv("chooseFighter");
+            removeElementDiv("startBattleButton");
+            removeElementDiv("gameFighters");
+            removeElementDiv("battleLogger");
             chooseFighter();
         }
     });
 }
 
 function randomAttributes(value, number) {
-    const speedValue = document.createElement('SPAN');
-    const strengthValue = document.createElement('SPAN');
-    const defenceValue = document.createElement('SPAN');
-
-    speedValue.id = value + "SpeedValue" + number;
-    speedValue.textContent = randomNumber(0.4, 0).toFixed(3);
-
-    strengthValue.id = value + "StrengthValue" + number;
-    strengthValue.textContent = randomNumber(3, 6).toFixed(1);
-
-    defenceValue.id = value + "DefenceValue" + number;
-    defenceValue.textContent = randomNumber(2, 5).toFixed(1);
-
     createElementDiv(value + "Speed" + number, '', 'Speed: ', value + number);
-    document.getElementById(value + "Speed" + number).appendChild(speedValue);
+    createElementSpan(value + "SpeedValue" + number, randomNumber(0.4, 0).toFixed(3), value + "Speed" + number);
     createElementDiv(value + "Strength" + number, '', 'Strength: ', value + number);
-    document.getElementById(value + "Strength" + number).appendChild(strengthValue);
+    createElementSpan(value + "StrengthValue" + number, randomNumber(3, 6).toFixed(1), value + "Strength" + number);
     createElementDiv(value + "Defence" + number, '', 'Defence: ', value + number);
-    document.getElementById(value + "Defence" + number).appendChild(defenceValue);
+    createElementSpan(value + "DefenceValue" + number, randomNumber(2, 5).toFixed(1), value + "Defence" + number);
 }
 
 function randomNumber(min, max) {
@@ -140,12 +127,14 @@ function startBattleButton() {
         attemptCounter = 1;
         if (value.target.tagName === "BUTTON") {
             if (document.getElementsByClassName("fighterSelected")[0]) {
+                document.getElementById('chooseFighter').style.display = "none";
+                document.getElementById('startBattleButton').style.display = "none";
                 gameFighters();
-                divRemove("battleLogger");
+                removeElementDiv("battleLogger");
             } else {
-                divRemove("gameFighters");
-                divRemove("battleLogger");
-                alert("Please select your HERO image :)");
+                removeElementDiv("gameFighters");
+                removeElementDiv("battleLogger");
+                alert("Please select your HERO image :)");                
             }
         }
     });
@@ -153,19 +142,15 @@ function startBattleButton() {
 
 function gameFighters() {
     const myFighterImg = document.createElement('IMG');
-    const myFighterHpValue = document.createElement('SPAN');
     const myFighterAttackBtn = document.createElement('BUTTON');
     const myFighterDefenceBtn = document.createElement('BUTTON');
     const versusImg = document.createElement('IMG');
     const OpponentImg = document.createElement('IMG');
-    const OpponentHpValue = document.createElement('SPAN');
     const fighterSelected = document.getElementsByClassName("fighterSelected")[0];
     const fighterSelectedNumber = fighterSelected.id[fighterSelected.id.length - 1];
     const fightersImg = document.getElementById("fightersImg").lastElementChild.className;
 
     myFighterImg.src = fighterSelected.currentSrc;
-    myFighterHpValue.id = "myFighterHpValue";
-    myFighterHpValue.textContent = "100";
     myFighterAttackBtn.type = "button";
     myFighterAttackBtn.id = "myFighterAttackBtn";
     myFighterAttackBtn.textContent = "💪";
@@ -173,19 +158,17 @@ function gameFighters() {
     myFighterDefenceBtn.type = "button";
     myFighterDefenceBtn.id = "myFighterDefenceBtn";
     myFighterDefenceBtn.textContent = "✋";
-    myFighterDefenceBtn.title = "Defence";
+    myFighterDefenceBtn.title = "Defend";
     versusImg.src = "vs.jpg";
     OpponentImg.src = (fightersImg === "randomFighterDog") ? "mice.jpeg" : "cactus.jpeg";
-    OpponentHpValue.id = "OpponentHpValue";
-    OpponentHpValue.textContent = "100";
 
     createElementDiv("gameFighters", "row", '', 'container');
     //document.getElementById('gameFighters').innerHTML = "";
     createElementHeader((roundCounter++) + " round :)", "gameFighters");
     createElementDiv("myFighter" + fighterSelectedNumber, "col", '', 'gameFighters');
     document.getElementById('myFighter' + fighterSelectedNumber).appendChild(myFighterImg);
-    createElementDiv("myFighterHp", '', "HP: ", 'myFighter' + fighterSelectedNumber);    
-    document.getElementById('myFighterHp').appendChild(myFighterHpValue);
+    createElementDiv("myFighterHp", '', "HP: ", 'myFighter' + fighterSelectedNumber); 
+    createElementSpan("myFighterHpValue", "100", 'myFighterHp');
     randomAttributes("myFighter", fighterSelectedNumber);
     document.getElementById("myFighterSpeedValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerSpeedValue" + fighterSelectedNumber).textContent;
     document.getElementById("myFighterStrengthValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerStrengthValue" + fighterSelectedNumber).textContent;
@@ -197,7 +180,7 @@ function gameFighters() {
     createElementDiv("Opponent1", "col", '', 'gameFighters');
     document.getElementById('Opponent1').appendChild(OpponentImg);
     createElementDiv("OpponentHp", '', 'HP: ', 'Opponent1');
-    document.getElementById('OpponentHp').appendChild(OpponentHpValue);
+    createElementSpan("OpponentHpValue", "100", 'OpponentHp');
     randomAttributes("Opponent", "1");    
 
     let myFighterHpCheck = document.getElementById("myFighterHpValue");
@@ -283,12 +266,12 @@ function actionButtons(action) {
         OpponentImgSrc.src = "skull.jpg";
         setTimeout( () => {
             attemptCounter = 1;
-            divRemove("battleLogger");
+            removeElementDiv("battleLogger");
             gameFighters(); 
     }, 3000);
     }
 
-    battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue);
+    battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue, myFighterDoubleStr, myFighterDoubleDef, OpponentDoubleStr, OpponentDoubleDef);
 }
 
 function opponentRandomActionbtn() {
@@ -298,12 +281,12 @@ function opponentRandomActionbtn() {
 }
 
 function double() {
-    const action = [1, 1, 1, 1, 2];
+    const action = [1, 1, 1, 1, 1, 1, 1, 1, 1, 2];
     randomAction = action[Math.floor(Math.random() * action.length)];
     return randomAction;
 }
 
-function battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue) {
+function battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue, myFighterDoubleStr, myFighterDoubleDef, OpponentDoubleStr, OpponentDoubleDef) {
     let myFighterHp = document.getElementById("myFighterHpValue");
     let OpponentHp = document.getElementById("OpponentHpValue");
     const myFighterHpCheck = Number(myFighterHp.textContent);
@@ -314,8 +297,20 @@ function battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHp
     createElementDiv("battleLogger", "row", '', 'container');
     createElementHeader("Battle Logger", "battleLogger");
     createElementDiv("firstAttempt", "col", '', 'battleLogger');
-    const firstAttempt = document.getElementById("firstAttempt");
-    firstAttempt.textContent = (attemptCounter++) + " attempt // myFighter->" + action + " // opponent->" + opponentRandomAction + " // myFighterHP->" + myFighterHpRezult + " // opponentHP->" + OpponentHpRezult;
+    createElementSpan('', (attemptCounter++) + " attempt || ", "firstAttempt");
+    createElementSpan('myFighterAction', "myFighter->" + action + " || ", "firstAttempt");
+    createElementSpan('opponentAction', "opponent->" + opponentRandomAction + " || ", "firstAttempt");
+    createElementSpan('myFighterHpChange', "myFighterHP-> [" + myFighterHpRezult + "]", "firstAttempt");
+    document.getElementById("myFighterHpChange").style.color = (myFighterHpRezult < 0) ? '#cc0000' : '#00cc00';
+    createElementSpan('', " || ", "firstAttempt");
+    createElementSpan('opponentHpChange', "opponentHP-> [" + OpponentHpRezult + "]", "firstAttempt");
+    document.getElementById("opponentHpChange").style.color = (OpponentHpRezult < 0) ? '#cc0000' : '#00cc00';
+
+    if (myFighterDoubleStr > 1) {createElementSpan('myFighterDoubleDMG', ' Your fighter generated double damage!', "firstAttempt");} 
+    if (myFighterDoubleDef > 1) {createElementSpan('myFighterDoubleDEF', ' Your fighter generated double defence!', "firstAttempt");} 
+    if (OpponentDoubleStr > 1) {createElementSpan('OpponentDoubleDMG', ' Your opponent generated double damage!', "firstAttempt");} 
+    if (OpponentDoubleDef > 1) {createElementSpan('OpponentDoubleDEF', ' Your opponent generated double defence!', "firstAttempt");}
+    
 }
 
 fighters.addEventListener("click", event => {
@@ -338,10 +333,10 @@ fighters.addEventListener("click", event => {
                 console.log("error");
         }
 
-        divRemove("chooseFighter");
-        divRemove("startBattleButton");
-        divRemove("gameFighters");
-        divRemove("battleLogger");
+        removeElementDiv("chooseFighter");
+        removeElementDiv("startBattleButton");
+        removeElementDiv("gameFighters");
+        removeElementDiv("battleLogger");
         !pickHero && pickHeroButton();
 
     }
@@ -368,7 +363,14 @@ function createElementHeader(headerTextContent, elementId) {
     document.getElementById(elementId).appendChild(headerElement);
 }
 
-function divRemove(elementId) {
+function createElementSpan(spanId, spanTextContent, elementId) {
+    const spanElement = document.createElement('SPAN');
+    spanElement.id = spanId;
+    spanElement.textContent = spanTextContent;
+    document.getElementById(elementId).appendChild(spanElement);
+}
+
+function removeElementDiv(elementId) {
     if (document.getElementById(elementId) !== null) {
         const value = document.getElementById(elementId);
         value.parentNode.removeChild(value);
