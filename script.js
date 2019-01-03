@@ -1,6 +1,7 @@
 const fighters = document.getElementById("fighters");
 let roundCounter = 1;
 let attemptCounter = 1;
+let points = 0;
 
 function badAss(value) {
     const fightersImg = document.getElementById('fightersImg');
@@ -16,7 +17,7 @@ function randomDog(value, number) {
         .then(result => {
             const dogs = result.message;
             const image = document.createElement('IMG');
-            image.id = "fighterDog" + number;            
+            image.id = "fighterDog" + number;
             image.className = "randomFighterDog";
             image.src = dogs;
 
@@ -33,7 +34,7 @@ function randomCat(value, number) {
             const image = document.createElement('IMG');
             image.id = "fighterCat" + number;
             image.className = "randomFighterCat";
-            image.src = cats;            
+            image.src = cats;
 
             value.appendChild(image);
         })
@@ -42,16 +43,11 @@ function randomCat(value, number) {
 
 function pickHeroButton() {
     const pickHeroButton = document.getElementById('pickHeroButton') ? document.getElementById('pickHeroButton') : document.createElement('DIV');
-    const button = document.createElement('BUTTON');
     pickHeroButton.id = "pickHeroButton";
     pickHeroButton.innerHTML = "";
-    button.type = "button";
-    button.id = "pickHero";
-    button.className = "mt-3";
-    button.textContent = "Ok, I'm ready to pick my HERO!";
 
     document.getElementById('container').appendChild(pickHeroButton);
-    pickHeroButton.appendChild(button);
+    createElementButton("button", "pickHero", "mt-3", "Ok, I'm ready to pick my HERO!", "pick HERO", 'pickHeroButton');
 
     pickHeroButton.addEventListener("click", value => {
         if (value.target.tagName === "BUTTON") {
@@ -111,16 +107,11 @@ function chooseFighter() {
 
 function startBattleButton() {
     const startBattleButton = document.getElementById('startBattleButton') ? document.getElementById('startBattleButton') : document.createElement('DIV');
-    const button = document.createElement('BUTTON');
     startBattleButton.id = "startBattleButton";
     startBattleButton.innerHTML = "";
-    button.type = "button";
-    button.id = "startBattle";
-    button.className = "mt-3";
-    button.textContent = "Ok, I'm ready to start my BATTLE!";
 
     document.getElementById('container').appendChild(startBattleButton);
-    startBattleButton.appendChild(button);
+    createElementButton("button", "startBattle", "mt-3", "Ok, I'm ready to start my BATTLE!", "start BATTLE!", 'startBattleButton');
 
     startBattleButton.addEventListener("click", value => {
         roundCounter = 1;
@@ -134,7 +125,7 @@ function startBattleButton() {
             } else {
                 removeElementDiv("gameFighters");
                 removeElementDiv("battleLogger");
-                alert("Please select your HERO image :)");                
+                alert("Please select your HERO image :)");
             }
         }
     });
@@ -142,8 +133,6 @@ function startBattleButton() {
 
 function gameFighters() {
     const myFighterImg = document.createElement('IMG');
-    const myFighterAttackBtn = document.createElement('BUTTON');
-    const myFighterDefenceBtn = document.createElement('BUTTON');
     const versusImg = document.createElement('IMG');
     const OpponentImg = document.createElement('IMG');
     const fighterSelected = document.getElementsByClassName("fighterSelected")[0];
@@ -151,14 +140,6 @@ function gameFighters() {
     const fightersImg = document.getElementById("fightersImg").lastElementChild.className;
 
     myFighterImg.src = fighterSelected.currentSrc;
-    myFighterAttackBtn.type = "button";
-    myFighterAttackBtn.id = "myFighterAttackBtn";
-    myFighterAttackBtn.textContent = "💪";
-    myFighterAttackBtn.title = "Attack";
-    myFighterDefenceBtn.type = "button";
-    myFighterDefenceBtn.id = "myFighterDefenceBtn";
-    myFighterDefenceBtn.textContent = "✋";
-    myFighterDefenceBtn.title = "Defend";
     versusImg.src = "vs.jpg";
     OpponentImg.src = (fightersImg === "randomFighterDog") ? "mice.jpeg" : "cactus.jpeg";
 
@@ -167,21 +148,21 @@ function gameFighters() {
     createElementHeader((roundCounter++) + " round :)", "gameFighters");
     createElementDiv("myFighter" + fighterSelectedNumber, "col", '', 'gameFighters');
     document.getElementById('myFighter' + fighterSelectedNumber).appendChild(myFighterImg);
-    createElementDiv("myFighterHp", '', "HP: ", 'myFighter' + fighterSelectedNumber); 
+    createElementDiv("myFighterHp", '', "HP: ", 'myFighter' + fighterSelectedNumber);
     createElementSpan("myFighterHpValue", "100", 'myFighterHp');
     randomAttributes("myFighter", fighterSelectedNumber);
     document.getElementById("myFighterSpeedValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerSpeedValue" + fighterSelectedNumber).textContent;
     document.getElementById("myFighterStrengthValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerStrengthValue" + fighterSelectedNumber).textContent;
     document.getElementById("myFighterDefenceValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerDefenceValue" + fighterSelectedNumber).textContent;
-    document.getElementById('myFighter' + fighterSelectedNumber).appendChild(myFighterAttackBtn);
-    document.getElementById('myFighter' + fighterSelectedNumber).appendChild(myFighterDefenceBtn);
+    createElementButton("button", "myFighterAttackBtn", '', "💪", "Attack", 'myFighter' + fighterSelectedNumber);
+    createElementButton("button", "myFighterDefenceBtn", '', "✋", "Defend", 'myFighter' + fighterSelectedNumber);
     createElementDiv("versus", "col", '', 'gameFighters');
     document.getElementById('versus').appendChild(versusImg);
     createElementDiv("Opponent1", "col", '', 'gameFighters');
     document.getElementById('Opponent1').appendChild(OpponentImg);
     createElementDiv("OpponentHp", '', 'HP: ', 'Opponent1');
     createElementSpan("OpponentHpValue", "100", 'OpponentHp');
-    randomAttributes("Opponent", "1");    
+    randomAttributes("Opponent", "1");
 
     let myFighterHpCheck = document.getElementById("myFighterHpValue");
     let OpponentHpCheck = document.getElementById("OpponentHpValue");
@@ -226,14 +207,14 @@ function actionButtons(action) {
     const OpponentDefence = (OpponentDefenceValue1 * (OpponentSpeedValue1 + 1) * OpponentDoubleDef);
 
     if (action === "Attack" && opponentRandomAction === "Attack") {
-        console.log("myFighter:", action, ", opponent:", opponentRandomAction);
-        console.log("myFighterDoubleStr:", myFighterDoubleStr, ", opponentDoubleStr:", OpponentDoubleStr);
+        //console.log("myFighter:", action, ", opponent:", opponentRandomAction);
+        //console.log("myFighterDoubleStr:", myFighterDoubleStr, ", opponentDoubleStr:", OpponentDoubleStr);
         myFighterHp.textContent = (myFighterHpValue >= (OpponentStrength - myFighterDefenceValue).toFixed(1)) ? (myFighterHpValue - (OpponentStrength - myFighterDefenceValue)).toFixed(1) : 0;
         OpponentHp.textContent = (OpponentHpValue >= (myFighterStrength - OpponentDefenceValue1).toFixed(1)) ? (OpponentHpValue - (myFighterStrength - OpponentDefenceValue1)).toFixed(1) : 0;
 
     } else if (action === "Attack" && opponentRandomAction === "Defence") {
-        console.log("myFighter:", action, ", opponent:", opponentRandomAction);
-        console.log("myFighterDoubleStr:", myFighterDoubleStr, ", opponentDoubleDef:", OpponentDoubleDef);
+        //console.log("myFighter:", action, ", opponent:", opponentRandomAction);
+        //console.log("myFighterDoubleStr:", myFighterDoubleStr, ", opponentDoubleDef:", OpponentDoubleDef);
         if ((myFighterStrengthValue * (myFighterSpeedValue + 1)) >= (OpponentDefenceValue1 * (OpponentSpeedValue1 + 1))) {
             OpponentHp.textContent = (OpponentHpValue >= (myFighterStrength - OpponentDefence).toFixed(1)) ? (OpponentHpValue - (myFighterStrength - OpponentDefence)).toFixed(1) : 0;
         } else {
@@ -241,8 +222,8 @@ function actionButtons(action) {
         }
 
     } else if (action === "Defence" && opponentRandomAction === "Attack") {
-        console.log("myFighter:", action, ", opponent:", opponentRandomAction);
-        console.log("myFighterDoubleDef:", myFighterDoubleDef, ", opponentDoubleStr:", OpponentDoubleStr);
+        //console.log("myFighter:", action, ", opponent:", opponentRandomAction);
+        //console.log("myFighterDoubleDef:", myFighterDoubleDef, ", opponentDoubleStr:", OpponentDoubleStr);
         if ((OpponentStrengthValue1 * (OpponentSpeedValue1 + 1)) >= (myFighterDefenceValue * (myFighterSpeedValue + 1))) {
             myFighterHp.textContent = (myFighterHpValue >= (OpponentStrength - myFighterDefence).toFixed(1)) ? (myFighterHpValue - (OpponentStrength - myFighterDefence)).toFixed(1) : 0;
         } else {
@@ -250,8 +231,8 @@ function actionButtons(action) {
         }
 
     } else if (action === "Defence" && opponentRandomAction === "Defence") {
-        console.log("myFighter:", action, ", opponent:", opponentRandomAction);
-        console.log("myFighterDoubleDef:", myFighterDoubleDef, ", opponentDoubleDef:", OpponentDoubleDef);
+        //console.log("myFighter:", action, ", opponent:", opponentRandomAction);
+        //console.log("myFighterDoubleDef:", myFighterDoubleDef, ", opponentDoubleDef:", OpponentDoubleDef);
         myFighterHp.textContent = (myFighterHpValue + (myFighterDefenceValue * myFighterDoubleDef)).toFixed(1);
         OpponentHp.textContent = (OpponentHpValue + (OpponentDefenceValue1 * OpponentDoubleDef)).toFixed(1);
     }
@@ -262,16 +243,18 @@ function actionButtons(action) {
     if (myFighterHp.textContent === "0") {
         myFighterImgSrc.src = "game-over.gif";
         OpponentImgSrc.src = (OpponentImgSrc.src.match(/mice/i)) ? "mouse-win.gif" : "flower-win.gif";
+        points = 0;
     } else if (OpponentHp.textContent === "0") {
         OpponentImgSrc.src = "skull.jpg";
-        setTimeout( () => {
+        setTimeout(() => {
             attemptCounter = 1;
             removeElementDiv("battleLogger");
-            gameFighters(); 
-    }, 3000);
+            gameFighters();
+            increaseAttributes();
+        }, 3000);
     }
 
-    battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue, myFighterDoubleStr, myFighterDoubleDef, OpponentDoubleStr, OpponentDoubleDef);
+    battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue, myFighterDoubleStr, myFighterDoubleDef, OpponentDoubleStr, OpponentDoubleDef, action, opponentRandomAction);
 }
 
 function opponentRandomActionbtn() {
@@ -286,7 +269,49 @@ function double() {
     return randomAction;
 }
 
-function battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue, myFighterDoubleStr, myFighterDoubleDef, OpponentDoubleStr, OpponentDoubleDef) {
+function increaseAttributes() {
+    points = Number((points + 0.3).toFixed(1));
+    const fighterSelected = document.getElementsByClassName("fighterSelected")[0];
+    const fighterSelectedNumber = fighterSelected.id[fighterSelected.id.length - 1];
+
+    createElementDiv('myFighterIncreaseButton', '', '', 'myFighter' + fighterSelectedNumber);
+    createElementButton("button", "increaseMyFighterSpeed", '', "speed+", "Increase speed by 0.1", 'myFighterIncreaseButton');
+    createElementButton("button", "increaseMyFighterStr", '', "str+", "Increase str by 0.1", 'myFighterIncreaseButton');
+    createElementButton("button", "increaseMyFighterDef", '', "def+", "Increase def by 0.1", 'myFighterIncreaseButton');
+    createElementDiv('myFighterPoints', '', 'myFighter points: ', 'myFighter' + fighterSelectedNumber);
+    createElementSpan('pointsAchieved', ' ' + points, 'myFighterPoints');
+
+    document.getElementById('myFighterIncreaseButton').addEventListener('click', value => {
+        const correctButton = value.target.innerHTML;
+        if (value.target.tagName === "BUTTON" && points > 0) {
+            switch (correctButton) {
+                case "speed+":
+                    increaseAtt("fighterContainerSpeedValue", "myFighterSpeedValue", 3);
+                    break;
+                case "str+":
+                    increaseAtt("fighterContainerStrengthValue", "myFighterStrengthValue", 1);
+                    break;
+                case "def+":
+                    increaseAtt("fighterContainerDefenceValue", "myFighterDefenceValue", 1);
+                    break;
+                default:
+                    console.log('Error');
+            }
+        }
+    });
+}
+
+function increaseAtt(id1, id2, toFixedValue) {
+    const fighterSelected = document.getElementsByClassName("fighterSelected")[0];
+    const fighterSelectedNumber = fighterSelected.id[fighterSelected.id.length - 1];
+    const value = document.getElementById(id1 + fighterSelectedNumber);
+    value.textContent = (Number(value.textContent) + 0.1).toFixed(toFixedValue);
+    points = Number((points - 0.1).toFixed(1));
+    document.getElementById("pointsAchieved").textContent = (points > 0) ? ' ' + points : ' 0';
+    document.getElementById(id2 + fighterSelectedNumber).textContent = value.textContent;
+}
+
+function battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHpValue, myFighterDoubleStr, myFighterDoubleDef, OpponentDoubleStr, OpponentDoubleDef, action, opponentRandomAction) {
     let myFighterHp = document.getElementById("myFighterHpValue");
     let OpponentHp = document.getElementById("OpponentHpValue");
     const myFighterHpCheck = Number(myFighterHp.textContent);
@@ -306,11 +331,18 @@ function battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHp
     createElementSpan('opponentHpChange', "opponentHP-> [" + OpponentHpRezult + "]", "firstAttempt");
     document.getElementById("opponentHpChange").style.color = (OpponentHpRezult < 0) ? '#cc0000' : '#00cc00';
 
-    if (myFighterDoubleStr > 1) {createElementSpan('myFighterDoubleDMG', ' Your fighter generated double damage!', "firstAttempt");} 
-    if (myFighterDoubleDef > 1) {createElementSpan('myFighterDoubleDEF', ' Your fighter generated double defence!', "firstAttempt");} 
-    if (OpponentDoubleStr > 1) {createElementSpan('OpponentDoubleDMG', ' Your opponent generated double damage!', "firstAttempt");} 
-    if (OpponentDoubleDef > 1) {createElementSpan('OpponentDoubleDEF', ' Your opponent generated double defence!', "firstAttempt");}
-    
+    if (action === "Attack" && myFighterDoubleStr > 1) {
+        createElementSpan('myFighterDoubleDMG', ' myFighter double DMG!', "firstAttempt");
+    }
+    if (action === "Defence" && myFighterDoubleDef > 1) {
+        createElementSpan('myFighterDoubleDEF', ' myFighter double DEF!', "firstAttempt");
+    }
+    if (opponentRandomAction === "Attack" && OpponentDoubleStr > 1) {
+        createElementSpan('OpponentDoubleDMG', ' opponent double DMG!', "firstAttempt");
+    }
+    if (opponentRandomAction === "Defence" && OpponentDoubleDef > 1) {
+        createElementSpan('OpponentDoubleDEF', ' opponent double DEF!', "firstAttempt");
+    }
 }
 
 fighters.addEventListener("click", event => {
@@ -343,7 +375,7 @@ fighters.addEventListener("click", event => {
 });
 
 // Functions for creating and deleting elements
-function createElementDiv(divId, divClassName, divTextContent, elementId){
+function createElementDiv(divId, divClassName, divTextContent, elementId) {
     let divElement = '';
     if (elementId === "container") {
         divElement = document.getElementById(divId) ? document.getElementById(divId) : document.createElement('DIV');
@@ -368,6 +400,16 @@ function createElementSpan(spanId, spanTextContent, elementId) {
     spanElement.id = spanId;
     spanElement.textContent = spanTextContent;
     document.getElementById(elementId).appendChild(spanElement);
+}
+
+function createElementButton(buttonType, buttonId, buttonClassName, buttonTextContent, buttonTitle, elementId) {
+    const button = document.createElement('BUTTON');
+    button.type = buttonType;
+    button.id = buttonId;
+    button.className = buttonClassName;
+    button.textContent = buttonTextContent;
+    button.title = buttonTitle;
+    document.getElementById(elementId).appendChild(button);
 }
 
 function removeElementDiv(elementId) {
