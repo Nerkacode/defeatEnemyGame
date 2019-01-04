@@ -1,7 +1,102 @@
-const fighters = document.getElementById("fighters");
 let roundCounter = 1;
 let attemptCounter = 1;
 let points = 0;
+let userGameInformation = [];
+
+printFirstPage();
+const userName = document.getElementById('userName'); 
+
+function printFirstPage() {
+    createElementDiv("userInformation", 'row col justify-content-center mt-3', '', "container");
+    createElementHeader('to start the game just enter your nickName', "userInformation");
+
+    const createInput = document.createElement('INPUT');
+    createInput.type = 'text';
+    createInput.id = 'userName';
+    createInput.className = 'mt-4';
+    createInput.placeholder = "nickName";
+
+    document.getElementById('userInformation').appendChild(createInput);
+    createElementButton('button', 'enterNickname', 'ml-2 mt-4', 'Start', 'Start', 'userInformation');
+}
+
+document.getElementById('userInformation').addEventListener('click', value => {
+    if (value.target.tagName === "BUTTON" && userName.value != '') {
+        printingChooseGameType();
+        document.getElementById('userInformation').style.display = "none";
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const storeData = window.localStorage.getItem('userGameInformation');
+    userGameInformation = JSON.parse(storeData) || [];
+});
+
+function writeToLocalStorage() {
+    userGameInformation.unshift({
+        userName: userName.value
+    });
+    window.localStorage.setItem("userGameInformation", JSON.stringify(userGameInformation));
+}
+
+function printingChooseGameType() {
+    createElementDiv("forHeader", 'row', '', "container");
+    createElementHeader('Hi, ' + userName.value + ', choose your game type :)', "forHeader");
+    createElementDiv("fighters", '', '', "container");
+
+    const createForm = document.createElement('FORM');
+    createForm.id = 'formForInput';
+    document.getElementById('fighters').appendChild(createForm);
+
+    createElementDiv("radioForDogs", '', '', "formForInput");
+
+    const createInput = document.createElement('INPUT');
+    createInput.type = 'radio';
+    createInput.id = 'dog-mouse';
+    createInput.name = 'chooseGameType';
+    document.getElementById('radioForDogs').appendChild(createInput);
+    createElementSpan('', ' Dog vs mice', 'radioForDogs');
+
+    createElementDiv("radioForCats", '', '', "formForInput");
+
+    const createInput2 = document.createElement('INPUT');
+    createInput2.type = 'radio';
+    createInput2.id = 'cat-flower';
+    createInput2.name = 'chooseGameType';
+    document.getElementById('radioForCats').appendChild(createInput2);
+    createElementSpan('', ' Cat vs flowers', 'radioForCats');
+
+    createElementDiv("fightersImg", '', '', "container");
+
+    document.getElementById("fighters").addEventListener("click", event => {
+        if (event.target.tagName === "INPUT") {
+            const pickHero = document.getElementById("pickHero");
+            const fightersImg = document.getElementById("fightersImg");
+            const fighter = event.target.id;
+            switch (fighter) {
+                case "dog-mouse":
+                    fightersImg.innerHTML = "";
+                    badAss("mice.jpeg");
+                    randomDog(fightersImg, 0);
+                    break;
+                case "cat-flower":
+                    fightersImg.innerHTML = "";
+                    badAss("cactus.jpeg");
+                    randomCat(fightersImg, 0);
+                    break;
+                default:
+                    console.log("error");
+            }
+
+            removeElementDiv("chooseFighter");
+            removeElementDiv("startBattleButton");
+            removeElementDiv("gameFighters");
+            removeElementDiv("battleLogger");
+            !pickHero && pickHeroButton();
+
+        }
+    });
+}
 
 function badAss(value) {
     const fightersImg = document.getElementById('fightersImg');
@@ -122,6 +217,7 @@ function startBattleButton() {
                 document.getElementById('startBattleButton').style.display = "none";
                 gameFighters();
                 removeElementDiv("battleLogger");
+                writeToLocalStorage();
             } else {
                 removeElementDiv("gameFighters");
                 removeElementDiv("battleLogger");
@@ -345,34 +441,7 @@ function battleLogger(action, opponentRandomAction, myFighterHpValue, OpponentHp
     }
 }
 
-fighters.addEventListener("click", event => {
-    if (event.target.tagName === "INPUT") {
-        const pickHero = document.getElementById("pickHero");
-        const fightersImg = document.getElementById("fightersImg");
-        const fighter = event.target.id;
-        switch (fighter) {
-            case "dog-mouse":
-                fightersImg.innerHTML = "";
-                badAss("mice.jpeg");
-                randomDog(fightersImg, 0);
-                break;
-            case "cat-flower":
-                fightersImg.innerHTML = "";
-                badAss("cactus.jpeg");
-                randomCat(fightersImg, 0);
-                break;
-            default:
-                console.log("error");
-        }
 
-        removeElementDiv("chooseFighter");
-        removeElementDiv("startBattleButton");
-        removeElementDiv("gameFighters");
-        removeElementDiv("battleLogger");
-        !pickHero && pickHeroButton();
-
-    }
-});
 
 // Functions for creating and deleting elements
 function createElementDiv(divId, divClassName, divTextContent, elementId) {
