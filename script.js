@@ -2,13 +2,14 @@ let roundCounter = 1;
 let attemptCounter = 1;
 let points = 0;
 let userGameInformation = [];
+let timeArray = [];
 
 printFirstPage();
-const userName = document.getElementById('userName'); 
+const userName = document.getElementById('userName');
 
 function printFirstPage() {
     createElementDiv("userInformation", 'row col justify-content-center mt-3', '', "container");
-    createElementHeader('to start the game just enter your nickName', "userInformation");
+    createElementHeader('To start the game just enter your nickName', "userInformation");
 
     const createInput = document.createElement('INPUT');
     createInput.type = 'text';
@@ -24,19 +25,85 @@ document.getElementById('userInformation').addEventListener('click', value => {
     if (value.target.tagName === "BUTTON" && userName.value != '') {
         printingChooseGameType();
         document.getElementById('userInformation').style.display = "none";
+        document.getElementById('rezultsDiv').style.display = "none";
     }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
     const storeData = window.localStorage.getItem('userGameInformation');
     userGameInformation = JSON.parse(storeData) || [];
+    if (userGameInformation.length != 0) {gameRezults();}
 });
 
 function writeToLocalStorage() {
+    const roundNumber = document.querySelector('#gameFighters h3').textContent[0];
+    let battleTime = Math.abs(timeArray[1]-timeArray[0]);
     userGameInformation.unshift({
-        userName: userName.value
+        userName: userName.value,
+        roundNumber,
+        battleTime
     });
     window.localStorage.setItem("userGameInformation", JSON.stringify(userGameInformation));
+}
+
+function gameRezults() {
+    userGameInformation.sort(compare);
+
+    const table = document.getElementById('rezultsTable') || document.createElement('TABLE');
+    table.id = "rezultsTable";
+    table.className = 'mt-3';
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    th.textContent = "No | ";
+    const th1 = document.createElement('th');
+    th1.textContent = "nickName | ";
+    const th2 = document.createElement('th');
+    th2.textContent = "round numbers | ";
+    const th3 = document.createElement('th');
+    th3.textContent = "battle time ";    
+    
+    createElementDiv('rezultsDiv', 'row col justify-content-center mt-5', '', 'container');
+    createElementHeader('Players statistics', 'rezultsDiv');
+
+    document.getElementById('rezultsDiv').appendChild(table);
+    table.appendChild(tr);
+    tr.appendChild(th);
+    tr.appendChild(th1);
+    tr.appendChild(th2);
+    tr.appendChild(th3);
+
+    userGameInformation.forEach((contact, index) => {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        const td2 = document.createElement('td');
+        const td3 = document.createElement('td');
+        const td4 = document.createElement('td');
+        table.appendChild(tr);
+        tr.appendChild(td);
+        td.textContent = index + 1 + ". ";
+        tr.appendChild(td2);
+        td2.textContent = contact.userName;
+        tr.appendChild(td3);
+        td3.textContent = contact.roundNumber;
+        tr.appendChild(td4);
+        var days = Math.floor(contact.battleTime / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((contact.battleTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((contact.battleTime % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((contact.battleTime % (1000 * 60)) / 1000);
+        td4.textContent = days + 'd ' + hours + 'h ' + minutes + 'min ' + seconds + 's';
+    });
+}
+
+function compare(a, b) {
+    if (a.roundNumber > b.roundNumber)
+        return -1;
+    if (a.roundNumber < b.roundNumber)
+        return 1;
+    return 0;
+}
+
+function timeCounter(time) {
+    timeArray.unshift(time);
 }
 
 function printingChooseGameType() {
@@ -150,7 +217,7 @@ function pickHeroButton() {
             removeElementDiv("startBattleButton");
             removeElementDiv("gameFighters");
             removeElementDiv("battleLogger");
-            chooseFighter();
+            chooseFighter();          
         }
     });
 }
@@ -217,7 +284,8 @@ function startBattleButton() {
                 document.getElementById('startBattleButton').style.display = "none";
                 gameFighters();
                 removeElementDiv("battleLogger");
-                writeToLocalStorage();
+                let time = new Date().getTime();
+                timeCounter(time);
             } else {
                 removeElementDiv("gameFighters");
                 removeElementDiv("battleLogger");
@@ -340,6 +408,9 @@ function actionButtons(action) {
         myFighterImgSrc.src = "game-over.gif";
         OpponentImgSrc.src = (OpponentImgSrc.src.match(/mice/i)) ? "mouse-win.gif" : "flower-win.gif";
         points = 0;
+        let time = new Date().getTime();
+        timeCounter(time);
+        writeToLocalStorage();
     } else if (OpponentHp.textContent === "0") {
         OpponentImgSrc.src = "skull.jpg";
         setTimeout(() => {
