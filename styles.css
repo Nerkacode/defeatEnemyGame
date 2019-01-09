@@ -1,3 +1,11 @@
+body {
+    background-image: url("bg-dog.jpg");
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    color: #dfbf9f;
+}
+
 #fightersImg img {
     width: 300px;
     height: 300px;
@@ -30,10 +38,16 @@
 }
 
 #rezultsTable tr {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #868e96;
     text-align: center;
+    color: black;;
 }
 
 #rezultsTable td {
     width: 130px;
+}
+
+input {
+    border-radius: 6px;
+    border: 1px solid #868e96
 }

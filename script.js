@@ -10,15 +10,9 @@ const userName = document.getElementById('userName');
 function printFirstPage() {
     createElementDiv("userInformation", 'row col justify-content-center mt-3', '', "container");
     createElementHeader('To start the game just enter your nickName', "userInformation");
-
-    const createInput = document.createElement('INPUT');
-    createInput.type = 'text';
-    createInput.id = 'userName';
-    createInput.className = 'mt-4';
-    createInput.placeholder = "nickName";
-
-    document.getElementById('userInformation').appendChild(createInput);
-    createElementButton('button', 'enterNickname', 'ml-2 mt-4', 'Start', 'Start', 'userInformation');
+    createElementInput('text', 'userName', 'mt-4', '', 'userInformation');
+    document.getElementById('userName').placeholder = "nickName";
+    createElementButton('button', 'enterNickname', 'ml-2 mt-4 btn btn-outline-secondary', 'Start', 'Start', 'userInformation');
 }
 
 document.getElementById('userInformation').addEventListener('click', value => {
@@ -32,7 +26,7 @@ document.getElementById('userInformation').addEventListener('click', value => {
 document.addEventListener('DOMContentLoaded', () => {
     const storeData = window.localStorage.getItem('userGameInformation');
     userGameInformation = JSON.parse(storeData) || [];
-    if (userGameInformation.length != 0) {gameRezults();}
+    if (userGameInformation.length != 0) {playerStatistics();}
 });
 
 function writeToLocalStorage() {
@@ -46,51 +40,35 @@ function writeToLocalStorage() {
     window.localStorage.setItem("userGameInformation", JSON.stringify(userGameInformation));
 }
 
-function gameRezults() {
+function playerStatistics() {
     userGameInformation.sort(compare);
 
     const table = document.getElementById('rezultsTable') || document.createElement('TABLE');
+    const tr = document.createElement('tr');  
     table.id = "rezultsTable";
-    table.className = 'mt-3';
-    const tr = document.createElement('tr');
-    const th = document.createElement('th');
-    th.textContent = "No ";
-    const th1 = document.createElement('th');
-    th1.textContent = "nickName ";
-    const th2 = document.createElement('th');
-    th2.textContent = "round numbers ";
-    const th3 = document.createElement('th');
-    th3.textContent = "battle time ";    
+    table.className = 'mt-3';    
     
     createElementDiv('rezultsDiv', 'row col justify-content-center mt-5', '', 'container');
     createElementHeader('Players statistics', 'rezultsDiv');
-
     document.getElementById('rezultsDiv').appendChild(table);
     table.appendChild(tr);
-    tr.appendChild(th);
-    tr.appendChild(th1);
-    tr.appendChild(th2);
-    tr.appendChild(th3);
+    createElementTableElement('th', "No ", tr);
+    createElementTableElement('th', "nickName ", tr);
+    createElementTableElement('th', "round numbers ", tr);
+    createElementTableElement('th', "battle time ", tr);
 
     userGameInformation.forEach((contact, index) => {
         const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        const td2 = document.createElement('td');
-        const td3 = document.createElement('td');
-        const td4 = document.createElement('td');
-        table.appendChild(tr);
-        tr.appendChild(td);
-        td.textContent = index + 1 + ". ";
-        tr.appendChild(td2);
-        td2.textContent = contact.userName;
-        tr.appendChild(td3);
-        td3.textContent = contact.roundNumber;
-        tr.appendChild(td4);
         var days = Math.floor(contact.battleTime / (1000 * 60 * 60 * 24));
         var hours = Math.floor((contact.battleTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         var minutes = Math.floor((contact.battleTime % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((contact.battleTime % (1000 * 60)) / 1000);
-        td4.textContent = days + 'd ' + hours + 'h ' + minutes + 'min ' + seconds + 's';
+
+        table.appendChild(tr);
+        createElementTableElement('td', index + 1 + ". ", tr);
+        createElementTableElement('td', contact.userName, tr);
+        createElementTableElement('td', contact.roundNumber, tr);
+        createElementTableElement('td', days + 'd ' + hours + 'h ' + minutes + 'min ' + seconds + 's', tr);
     });
 }
 
@@ -116,23 +94,11 @@ function printingChooseGameType() {
     document.getElementById('fighters').appendChild(createForm);
 
     createElementDiv("radioForDogs", '', '', "formForInput");
-
-    const createInput = document.createElement('INPUT');
-    createInput.type = 'radio';
-    createInput.id = 'dog-mouse';
-    createInput.name = 'chooseGameType';
-    document.getElementById('radioForDogs').appendChild(createInput);
+    createElementInput('radio', 'dog-mouse', '', 'chooseGameType', 'radioForDogs');
     createElementSpan('', ' Dog vs mice', 'radioForDogs');
-
     createElementDiv("radioForCats", '', '', "formForInput");
-
-    const createInput2 = document.createElement('INPUT');
-    createInput2.type = 'radio';
-    createInput2.id = 'cat-flower';
-    createInput2.name = 'chooseGameType';
-    document.getElementById('radioForCats').appendChild(createInput2);
+    createElementInput('radio', 'cat-flower', '', 'chooseGameType', 'radioForCats');
     createElementSpan('', ' Cat vs flowers', 'radioForCats');
-
     createElementDiv("fightersImg", '', '', "container");
 
     document.getElementById("fighters").addEventListener("click", event => {
@@ -144,12 +110,12 @@ function printingChooseGameType() {
                 case "dog-mouse":
                     fightersImg.innerHTML = "";
                     badAss("mice.jpeg");
-                    randomDog(fightersImg, 0);
+                    randomDog('fightersImg', 0);
                     break;
                 case "cat-flower":
                     fightersImg.innerHTML = "";
                     badAss("cactus.jpeg");
-                    randomCat(fightersImg, 0);
+                    randomCat('fightersImg', 0);
                     break;
                 default:
                     console.log("error");
@@ -166,11 +132,7 @@ function printingChooseGameType() {
 }
 
 function badAss(value) {
-    const fightersImg = document.getElementById('fightersImg');
-    const image = document.createElement('IMG');
-    image.id = "fighterBadAss";
-    image.src = value;
-    fightersImg.appendChild(image);
+    createElementImg("fighterBadAss", '', value, 'fightersImg');
 }
 
 function randomDog(value, number) {
@@ -178,12 +140,7 @@ function randomDog(value, number) {
         .then(response => response.json())
         .then(result => {
             const dogs = result.message;
-            const image = document.createElement('IMG');
-            image.id = "fighterDog" + number;
-            image.className = "randomFighterDog";
-            image.src = dogs;
-
-            value.appendChild(image);
+           createElementImg("fighterDog" + number, "randomFighterDog", dogs, value);
         })
         .catch(err => console.log(err));
 }
@@ -193,12 +150,7 @@ function randomCat(value, number) {
         .then(response => response.json())
         .then(result => {
             const cats = result.file;
-            const image = document.createElement('IMG');
-            image.id = "fighterCat" + number;
-            image.className = "randomFighterCat";
-            image.src = cats;
-
-            value.appendChild(image);
+            createElementImg("fighterCat" + number, "randomFighterCat", cats, value);
         })
         .catch(err => console.log(err));
 }
@@ -209,7 +161,7 @@ function pickHeroButton() {
     pickHeroButton.innerHTML = "";
 
     document.getElementById('container').appendChild(pickHeroButton);
-    createElementButton("button", "pickHero", "mt-3", "Ok, I'm ready to pick my HERO!", "pick HERO", 'pickHeroButton');
+    createElementButton("button", "pickHero", "mt-3 btn btn-outline-secondary", "Ok, I'm ready to pick my HERO!", "pick HERO", 'pickHeroButton');
 
     pickHeroButton.addEventListener("click", value => {
         if (value.target.tagName === "BUTTON") {
@@ -247,11 +199,10 @@ function chooseFighter() {
     //i <= 3 --> number 3 determines how many photos will be printed after pushing "I am Ready!"
     for (let i = 1; i <= 3; i++) {
         createElementDiv("fighterContainer" + i, "col", '', 'chooseFighter');
-        const fighterContainer = document.getElementById('fighterContainer' + i);
         if (fightersImg === "randomFighterDog") {
-            randomDog(fighterContainer, i);
+            randomDog('fighterContainer' + i, i);
         } else if (fightersImg === "randomFighterCat") {
-            randomCat(fighterContainer, i);
+            randomCat('fighterContainer' + i, i);
         }
         randomAttributes("fighterContainer", i);
     }
@@ -277,7 +228,7 @@ function startBattleButton() {
     startBattleButton.innerHTML = "";
 
     document.getElementById('container').appendChild(startBattleButton);
-    createElementButton("button", "startBattle", "mt-3", "Ok, I'm ready to start my BATTLE!", "start BATTLE!", 'startBattleButton');
+    createElementButton("button", "startBattle", "mt-3 btn btn-outline-secondary", "Ok, I'm ready to start my BATTLE!", "start BATTLE!", 'startBattleButton');
 
     startBattleButton.addEventListener("click", value => {
         roundCounter = 1;
@@ -300,34 +251,27 @@ function startBattleButton() {
 }
 
 function gameFighters() {
-    const myFighterImg = document.createElement('IMG');
-    const versusImg = document.createElement('IMG');
-    const OpponentImg = document.createElement('IMG');
     const fighterSelected = document.getElementsByClassName("fighterSelected")[0];
     const fighterSelectedNumber = fighterSelected.id[fighterSelected.id.length - 1];
     const fightersImg = document.getElementById("fightersImg").lastElementChild.className;
-
-    myFighterImg.src = fighterSelected.currentSrc;
-    versusImg.src = "vs.jpg";
-    OpponentImg.src = (fightersImg === "randomFighterDog") ? "mice.jpeg" : "cactus.jpeg";
 
     createElementDiv("gameFighters", "row", '', 'container');
     //document.getElementById('gameFighters').innerHTML = "";
     createElementHeader((roundCounter++) + " round :)", "gameFighters");
     createElementDiv("myFighter" + fighterSelectedNumber, "col", '', 'gameFighters');
-    document.getElementById('myFighter' + fighterSelectedNumber).appendChild(myFighterImg);
+    createElementImg('', '', fighterSelected.currentSrc, 'myFighter' + fighterSelectedNumber);
     createElementDiv("myFighterHp", '', "HP: ", 'myFighter' + fighterSelectedNumber);
     createElementSpan("myFighterHpValue", "100", 'myFighterHp');
     randomAttributes("myFighter", fighterSelectedNumber);
     document.getElementById("myFighterSpeedValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerSpeedValue" + fighterSelectedNumber).textContent;
     document.getElementById("myFighterStrengthValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerStrengthValue" + fighterSelectedNumber).textContent;
     document.getElementById("myFighterDefenceValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerDefenceValue" + fighterSelectedNumber).textContent;
-    createElementButton("button", "myFighterAttackBtn", '', "💪", "Attack", 'myFighter' + fighterSelectedNumber);
-    createElementButton("button", "myFighterDefenceBtn", '', "✋", "Defend", 'myFighter' + fighterSelectedNumber);
+    createElementButton("button", "myFighterAttackBtn", 'btn btn-outline-secondary mr-2 mt-2', "💪", "Attack", 'myFighter' + fighterSelectedNumber);
+    createElementButton("button", "myFighterDefenceBtn", 'btn btn-outline-secondary mt-2', "✋", "Defend", 'myFighter' + fighterSelectedNumber);
     createElementDiv("versus", "col", '', 'gameFighters');
-    document.getElementById('versus').appendChild(versusImg);
+    createElementImg('', '', "vs.jpg", 'versus');
     createElementDiv("Opponent1", "col", '', 'gameFighters');
-    document.getElementById('Opponent1').appendChild(OpponentImg);
+    createElementImg('', '', (fightersImg === "randomFighterDog") ? "mice.jpeg" : "cactus.jpeg", 'Opponent1');
     createElementDiv("OpponentHp", '', 'HP: ', 'Opponent1');
     createElementSpan("OpponentHpValue", "100", 'OpponentHp');
     randomAttributes("Opponent", "1");
@@ -446,10 +390,10 @@ function increaseAttributes() {
     const fighterSelectedNumber = fighterSelected.id[fighterSelected.id.length - 1];
 
     createElementDiv('myFighterIncreaseButton', '', '', 'myFighter' + fighterSelectedNumber);
-    createElementButton("button", "increaseMyFighterSpeed", '', "speed+", "Increase speed by 0.1", 'myFighterIncreaseButton');
-    createElementButton("button", "increaseMyFighterStr", '', "str+", "Increase str by 0.1", 'myFighterIncreaseButton');
-    createElementButton("button", "increaseMyFighterDef", '', "def+", "Increase def by 0.1", 'myFighterIncreaseButton');
-    createElementDiv('myFighterPoints', '', 'myFighter points: ', 'myFighter' + fighterSelectedNumber);
+    createElementButton("button", "increaseMyFighterSpeed", 'btn btn-outline-secondary mt-2 mr-2', "speed+", "Increase speed by 0.1", 'myFighterIncreaseButton');
+    createElementButton("button", "increaseMyFighterStr", 'btn btn-outline-secondary mt-2 mr-2', "str+", "Increase str by 0.1", 'myFighterIncreaseButton');
+    createElementButton("button", "increaseMyFighterDef", 'btn btn-outline-secondary mt-2', "def+", "Increase def by 0.1", 'myFighterIncreaseButton');
+    createElementDiv('myFighterPoints', 'text-danger', 'myFighter points: ', 'myFighter' + fighterSelectedNumber);
     createElementSpan('pointsAchieved', ' ' + points, 'myFighterPoints');
 
     document.getElementById('myFighterIncreaseButton').addEventListener('click', value => {
@@ -534,7 +478,7 @@ function createElementDiv(divId, divClassName, divTextContent, elementId) {
 
 function createElementHeader(headerTextContent, elementId) {
     const headerElement = document.createElement('H3');
-    headerElement.className = "w-100 border-bottom border-dark m-3";
+    headerElement.className = "w-100 border-bottom border-secondary m-3";
     headerElement.textContent = headerTextContent;
     document.getElementById(elementId).appendChild(headerElement);
 }
@@ -554,6 +498,29 @@ function createElementButton(buttonType, buttonId, buttonClassName, buttonTextCo
     button.textContent = buttonTextContent;
     button.title = buttonTitle;
     document.getElementById(elementId).appendChild(button);
+}
+
+function createElementInput(inputType, inputId, inputClassName, inputName, elementId) {
+    const createInput = document.createElement('INPUT');
+    createInput.type = inputType;
+    createInput.id = inputId;
+    createInput.className = inputClassName;
+    createInput.name = inputName;
+    document.getElementById(elementId).appendChild(createInput);
+}
+
+function createElementImg(imgId, imgClassName, imgCrc, elementId) {
+    const image = document.createElement('IMG');
+    image.id = imgId;
+    image.className = imgClassName;
+    image.src = imgCrc;
+    document.getElementById(elementId).appendChild(image);
+}
+
+function createElementTableElement(createElement, TableElementTextContent, elementId) {
+    const TableElement = document.createElement(createElement);
+    TableElement.textContent = TableElementTextContent;
+    elementId.appendChild(TableElement);
 }
 
 function removeElementDiv(elementId) {
