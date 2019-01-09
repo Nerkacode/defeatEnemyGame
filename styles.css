@@ -33,3 +33,7 @@
     border-bottom: 1px solid black;
     text-align: center;
 }
+
+#rezultsTable td {
+    width: 130px;
+}

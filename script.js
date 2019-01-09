@@ -54,11 +54,11 @@ function gameRezults() {
     table.className = 'mt-3';
     const tr = document.createElement('tr');
     const th = document.createElement('th');
-    th.textContent = "No | ";
+    th.textContent = "No ";
     const th1 = document.createElement('th');
-    th1.textContent = "nickName | ";
+    th1.textContent = "nickName ";
     const th2 = document.createElement('th');
-    th2.textContent = "round numbers | ";
+    th2.textContent = "round numbers ";
     const th3 = document.createElement('th');
     th3.textContent = "battle time ";    
     
@@ -217,7 +217,11 @@ function pickHeroButton() {
             removeElementDiv("startBattleButton");
             removeElementDiv("gameFighters");
             removeElementDiv("battleLogger");
-            chooseFighter();          
+            chooseFighter();
+            document.getElementById('forHeader').style.display = 'none';
+            document.getElementById('fighters').style.display = 'none';
+            document.getElementById('fightersImg').style.display = 'none';
+            document.getElementById('pickHeroButton').style.display = 'none';
         }
     });
 }
