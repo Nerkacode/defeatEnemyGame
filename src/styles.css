@@ -1,5 +1,5 @@
 body {
-    background-image: url("bg-dog.jpg");
+    background-image: url("images/jpg/bg-dog.jpg");
     height: 100vh;
     background-size: cover;
     background-position: center;
@@ -30,7 +30,7 @@ body {
 }
 
 .fighterSelected {
-    border: 1px solid red;
+    border: 1px solid #dfbf9f;
 }
 
 #versus {
@@ -40,7 +40,7 @@ body {
 #rezultsTable tr {
     border-bottom: 1px solid #868e96;
     text-align: center;
-    color: black;;
+    color: #cccccc;
 }
 
 #rezultsTable td {
@@ -49,5 +49,13 @@ body {
 
 input {
     border-radius: 6px;
-    border: 1px solid #868e96
+    border: 1px solid #868e96;
+    background-color: #e6e6e6;
+}
+
+#container {
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-bottom: 50px;
+    padding-top: 10px;
+    margin-top: 40px;
 }

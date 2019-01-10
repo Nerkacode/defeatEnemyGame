@@ -12,7 +12,7 @@ function printFirstPage() {
     createElementHeader('To start the game just enter your nickName', "userInformation");
     createElementInput('text', 'userName', 'mt-4', '', 'userInformation');
     document.getElementById('userName').placeholder = "nickName";
-    createElementButton('button', 'enterNickname', 'ml-2 mt-4 btn btn-outline-secondary', 'Start', 'Start', 'userInformation');
+    createElementButton('button', 'enterNickname', 'ml-2 mt-4 btn btn-outline-warning', 'Start', 'Start', 'userInformation');
 }
 
 document.getElementById('userInformation').addEventListener('click', value => {
@@ -109,12 +109,12 @@ function printingChooseGameType() {
             switch (fighter) {
                 case "dog-mouse":
                     fightersImg.innerHTML = "";
-                    badAss("mice.jpeg");
+                    badAss("images/jpg/mice.jpeg");
                     randomDog('fightersImg', 0);
                     break;
                 case "cat-flower":
                     fightersImg.innerHTML = "";
-                    badAss("cactus.jpeg");
+                    badAss("images/jpg/cactus.jpeg");
                     randomCat('fightersImg', 0);
                     break;
                 default:
@@ -161,7 +161,7 @@ function pickHeroButton() {
     pickHeroButton.innerHTML = "";
 
     document.getElementById('container').appendChild(pickHeroButton);
-    createElementButton("button", "pickHero", "mt-3 btn btn-outline-secondary", "Ok, I'm ready to pick my HERO!", "pick HERO", 'pickHeroButton');
+    createElementButton("button", "pickHero", "mt-3 btn btn-outline-warning", "Ok, I'm ready to pick my HERO!", "pick HERO", 'pickHeroButton');
 
     pickHeroButton.addEventListener("click", value => {
         if (value.target.tagName === "BUTTON") {
@@ -228,7 +228,7 @@ function startBattleButton() {
     startBattleButton.innerHTML = "";
 
     document.getElementById('container').appendChild(startBattleButton);
-    createElementButton("button", "startBattle", "mt-3 btn btn-outline-secondary", "Ok, I'm ready to start my BATTLE!", "start BATTLE!", 'startBattleButton');
+    createElementButton("button", "startBattle", "mt-3 btn btn-outline-warning", "Ok, I'm ready to start my BATTLE!", "start BATTLE!", 'startBattleButton');
 
     startBattleButton.addEventListener("click", value => {
         roundCounter = 1;
@@ -266,12 +266,12 @@ function gameFighters() {
     document.getElementById("myFighterSpeedValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerSpeedValue" + fighterSelectedNumber).textContent;
     document.getElementById("myFighterStrengthValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerStrengthValue" + fighterSelectedNumber).textContent;
     document.getElementById("myFighterDefenceValue" + fighterSelectedNumber).textContent = document.getElementById("fighterContainerDefenceValue" + fighterSelectedNumber).textContent;
-    createElementButton("button", "myFighterAttackBtn", 'btn btn-outline-secondary mr-2 mt-2', "💪", "Attack", 'myFighter' + fighterSelectedNumber);
-    createElementButton("button", "myFighterDefenceBtn", 'btn btn-outline-secondary mt-2', "✋", "Defend", 'myFighter' + fighterSelectedNumber);
+    createElementButton("button", "myFighterAttackBtn", 'btn btn-outline-warning mr-2 mt-2', "💪", "Attack", 'myFighter' + fighterSelectedNumber);
+    createElementButton("button", "myFighterDefenceBtn", 'btn btn-outline-warning mt-2', "✋", "Defend", 'myFighter' + fighterSelectedNumber);
     createElementDiv("versus", "col", '', 'gameFighters');
-    createElementImg('', '', "vs.jpg", 'versus');
+    createElementImg('', '', "images/jpg/vs.jpg", 'versus');
     createElementDiv("Opponent1", "col", '', 'gameFighters');
-    createElementImg('', '', (fightersImg === "randomFighterDog") ? "mice.jpeg" : "cactus.jpeg", 'Opponent1');
+    createElementImg('', '', (fightersImg === "randomFighterDog") ? "images/jpg/mice.jpeg" : "images/jpg/cactus.jpeg", 'Opponent1');
     createElementDiv("OpponentHp", '', 'HP: ', 'Opponent1');
     createElementSpan("OpponentHpValue", "100", 'OpponentHp');
     randomAttributes("Opponent", "1");
@@ -353,14 +353,14 @@ function actionButtons(action) {
     const OpponentImgSrc = document.querySelector('#Opponent1 img');
 
     if (myFighterHp.textContent === "0") {
-        myFighterImgSrc.src = "game-over.gif";
-        OpponentImgSrc.src = (OpponentImgSrc.src.match(/mice/i)) ? "mouse-win.gif" : "flower-win.gif";
+        myFighterImgSrc.src = "images/gif/game-over.gif";
+        OpponentImgSrc.src = (OpponentImgSrc.src.match(/mice/i)) ? "images/gif/mouse-win.gif" : "images/gif/flower-win.gif";
         points = 0;
         let time = new Date().getTime();
         timeCounter(time);
         writeToLocalStorage();
     } else if (OpponentHp.textContent === "0") {
-        OpponentImgSrc.src = "skull.jpg";
+        OpponentImgSrc.src = "images/jpg/skull.jpg";
         setTimeout(() => {
             attemptCounter = 1;
             removeElementDiv("battleLogger");
@@ -390,9 +390,9 @@ function increaseAttributes() {
     const fighterSelectedNumber = fighterSelected.id[fighterSelected.id.length - 1];
 
     createElementDiv('myFighterIncreaseButton', '', '', 'myFighter' + fighterSelectedNumber);
-    createElementButton("button", "increaseMyFighterSpeed", 'btn btn-outline-secondary mt-2 mr-2', "speed+", "Increase speed by 0.1", 'myFighterIncreaseButton');
-    createElementButton("button", "increaseMyFighterStr", 'btn btn-outline-secondary mt-2 mr-2', "str+", "Increase str by 0.1", 'myFighterIncreaseButton');
-    createElementButton("button", "increaseMyFighterDef", 'btn btn-outline-secondary mt-2', "def+", "Increase def by 0.1", 'myFighterIncreaseButton');
+    createElementButton("button", "increaseMyFighterSpeed", 'btn btn-outline-warning mt-2 mr-2', "speed+", "Increase speed by 0.1", 'myFighterIncreaseButton');
+    createElementButton("button", "increaseMyFighterStr", 'btn btn-outline-warning mt-2 mr-2', "str+", "Increase str by 0.1", 'myFighterIncreaseButton');
+    createElementButton("button", "increaseMyFighterDef", 'btn btn-outline-warning mt-2', "def+", "Increase def by 0.1", 'myFighterIncreaseButton');
     createElementDiv('myFighterPoints', 'text-danger', 'myFighter points: ', 'myFighter' + fighterSelectedNumber);
     createElementSpan('pointsAchieved', ' ' + points, 'myFighterPoints');
 
